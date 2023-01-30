@@ -17,7 +17,7 @@ $icons: (
 @mixin icon( $name ) {
 	content: getIconContent( $name );
 	display: inline-block;
-	font-family: "{{ fontName }}";
+	font-family: "{{ fontFamilyName }}";
 	font-style: normal;
 	font-weight: normal;
 	font-variant: normal;
@@ -31,15 +31,15 @@ $icons: (
 
 @mixin initIcon() {
 	@font-face {
-		font-family: "{{ fontName }}";
+		font-family: "{{ fontFamilyName }}";
 		font-style: normal;
 		font-weight: normal;
-		src: url( "{{ dataUri }}" ) format( "woff" );
+		src: url( "{{ dataUri }}" );
 	}
 
 	.{{ className }} {
 		display: inline-block;
-		font-family: "{{ fontName }}";
+		font-family: "{{ fontFamilyName }}";
 		font-style: normal;
 		font-weight: normal;
 		font-variant: normal;
@@ -68,7 +68,7 @@ $icons: (
 	}
 
 {% for codepoint in codepoints %}
-	.{{ className }}.-{{ codepoint[ 0 ] }}:before {
+	.{{ className }}.-{{ codepoint[ 0 ] }}::before {
 		content: unquote("\"\\{{ codepoint[ 1 ] }}\"");
 	}
 {% endfor %}

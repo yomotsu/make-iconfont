@@ -39,7 +39,7 @@ module.exports = async( options ) => {
 	} );
 
 	const woffBuffer = await generateFont( generateFontParams );
-	const mime = 'application/font-woff';
+	const mime = 'font/woff2';
 	const encoding = 'base64';
 	const data = woffBuffer.toString( encoding );
 	const dataUri = `data:${ mime };${ encoding },${ data }`;

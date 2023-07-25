@@ -1,0 +1,49 @@
+@font-face {
+	font-family: "{{ fontFamilyName }}";
+	font-style: normal;
+	font-weight: normal;
+	src: url( "{{ dataUri }}" );
+}
+
+:root {
+	--iconfont: "{{ fontFamilyName }}";
+{% for codepoint in codepoints %}
+	--icon-{{codepoint[ 0 ]}}: "\{{codepoint[ 1 ]}}";
+{% endfor %}
+}
+
+.{{ className }} {
+	display: inline-block;
+	font-family: "{{ fontFamilyName }}";
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	line-height: 1;
+	text-transform: none;
+	vertical-align: middle;
+	speak: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	/* stylelint-disable */
+	/* For With CJK Text =========== */
+	position: relative;
+	top: -0.1em;
+	/* stylelint-enable */
+}
+
+.{{ className }}::before {
+	font-family: inherit;
+	font-style: inherit;
+	font-weight: inherit;
+	font-variant: inherit;
+	line-height: inherit;
+	text-transform: inherit;
+	vertical-align: inherit;
+}
+
+{% for codepoint in codepoints %}
+.{{ className }}.-{{ codepoint[ 0 ] }}::before {
+	content: var(--icon-{{ codepoint[ 0 ] }});
+}
+{% endfor %}

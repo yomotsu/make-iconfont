@@ -1,35 +1,13 @@
-$icons: (
+@use "sass:string";
 
-	"right": unquote("\"\\e004\""),
-
-	"down": unquote("\"\\e003\""),
-
-	"left": unquote("\"\\e002\""),
-
-	"up": unquote("\"\\e001\""),
-
-	"null": unquote("\"\\e000\""),
-
-	"rabbit": unquote("\"\\e005\""),
-
-	"panda": unquote("\"\\e006\""),
-
-);
-
-@function getIconContent( $key ) {
-	@each $pair in $icons {
-		@if nth( $pair, 1 ) == $key {
-			@return nth( $pair, 2 );
-		}
-	}
-
-	@return null;
+@function getIconContent( $name ) {
+	@return var( --icon-#{ $name } );
 }
 
 @mixin icon( $name ) {
-	content: getIconContent( $name );
+	content: var( --icon-#{ $name } );
 	display: inline-block;
-	font-family: "icon";
+	font-family: var( --iconfont );
 	font-style: normal;
 	font-weight: normal;
 	font-variant: normal;
@@ -42,16 +20,37 @@ $icons: (
 }
 
 @mixin initIcon() {
+	:root {
+		--iconfont: "icon";
+
+		--icon-right: #{ string.unquote("\"\\e004\"") };
+
+		--icon-down: #{ string.unquote("\"\\e003\"") };
+
+		--icon-left: #{ string.unquote("\"\\e002\"") };
+
+		--icon-up: #{ string.unquote("\"\\e001\"") };
+
+		--icon-null: #{ string.unquote("\"\\e000\"") };
+
+		--icon-rabbit: #{ string.unquote("\"\\e005\"") };
+
+		--icon-panda: #{ string.unquote("\"\\e006\"") };
+
+	}
+
+
 	@font-face {
 		font-family: "icon";
 		font-style: normal;
 		font-weight: normal;
-		src: url( "data:font/woff2;base64,d09GMgABAAAAAAW4AAsAAAAADJAAAAVnAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHIFQBmAAhVwKiASGYQE2AiQDYAsyAAQgBYQWB4EaG/YKMwPCxgFA0R9L9l8nmGPo7IHVOwphwhLr5ExOXEpe6GPM3yD+9t3h8sELYB9XT9FRbGTD0cYFtgkeeL1/z1Wgl6QyJvNDzi+51zOHqZ46gZOHsRO3lovQLBYZoa5JxoP/5rck17ZNNkexTxBdOqkd5BuF/jG+IKkUTjeIYUji9+Pa63uFfOBgge6u4Jg18kgTupzrcjYwsEB2TtdN1m5y/W9xLDIAGmGFpgsDOJjc+/DHkq/sjk/zXQNA5K/rZYVuggOqKrDpbIpD2iDehsuu6yCAZ6blZKzfsIPok9dYzWCaMlPAbyw+ZSV5OHSMzvkKwSE0s6RmW2mTA4pJlr4slv4GGMAVEAyXx0dLaZIWyYmRxOj7SiQSlZHqU8pFs37uxjajv1ioP8HigJPHEn31o41rfcGArfaCxP7xZSyjIJkOygm23NYV8hiTCGTgOze7HvBkFjBAgalAQ/zy0x4pt2wqxUt7WO0kpGKKlK9MpVr1mrQk8h/kKVSpWr3GuAx6UWoKqb6Gq5LRkrGMlWThqqR4fFiSiEViiSPQV2Bm3ZhE/7gN0Uch/Yez1LpPceJCIp4PxEX8CbhhABAVrBgA8nT0B/kYAAoRgiKkoBh9QAk8UAoflMEFlUhANWJQgwjUoh+ohwMaEYAm9AUthhy+YIfBF2GHxhcJFL5Q4lzDCAJyAyNY0Au3wQYwEMDM+dYXVxBvFOVcQqhM3sGBoHnSFaUtXdcdPV6ff2wwlZvw4RnjU7WybCwSMrHrNN+xx17J0kpwjq5h5J4/ztLCi0vYHSpN1X44ZvKWF62BrkrHQFh4sEsdHqfeWICgFpxWTghMfRHZUNHd2Fr9wX0pYfYtfEp9n7VJEe/7T1YKDWdalQNQwosI1y+db6xcuywMWTVT32aA6/4pBlwJrMTnSMl5JlHsRiiPjeXWOqdC8EMOESl5Xno/tGLui4Yb7noPLSxo4X6UMhV+YSplCKP2c9FI/xFTFb6VMuE+gO43yG2RG5nJVY+1hBPAeTRa5KPMy5QC82EUHsoNE93cRGaCNOKIRHEDWk/lZCu9vaV1Mo4poSh++raIumES1dsBdzUPT7RSTF/cu/daWxK6h9hoamBn1DfjbNzWF/1OyBsb6nsiWgS5Jl/wmiRHj1uX3n1FCrj9V3fp47s73uXB+f88vlzH+E5o0KG6M91NpgyyLrnG56ZI5VqP/dxbDniQrQKRhSpEu48urVJvZCv0/hKgwqFpPhQwc2/urxubv9yct8UhPdZiPFm6uMm646/5WQnil9K1ByZUf9Te7ewPS4urbyVs+I/GVrv0Xtv8i5pcseHF3+dOdB/z+b/r/UZKZHKFVY8G3XiNNrrOibOm5Rgk1szsLRM0G8QUdVBEnjdbh/xwyzz8V60Xp0Amej+TUw1NdfNwbvEXPhnw5ed/NqEsm/WCQ6K0p0wCWSu9fEi+CzuuTO/rSxlUyEQP4vIDUSKBp06DVjNiL8cUEv8GjAdCOD5RrshBiVYMgOEbAYtjMjxTzN7Z18dBiui6CLFaACmSQYldlGjFdRj93YMl9hyeXd7O4xvf2pYtdzmx1km/aNyCEdlna/5I6lyIfdNFL/KgRGKUPNoP1uc4qDKy5Ij3nJNRCBmL5IWcNpNqubUtp23RuBx3s8uJzd/WLxq3YAT1Gq75R1KxC84d+6YrIXmwVMrSKPmN7AfrcxwUEsaEhYY54r1eCgU1LeM/y9J5IafNVKOk3Fo0GpdlTf8int3R4az6uO8LdNUkyYqq6YZp2Y7r+RoohhMkpU17OMk8Tnr0+ZWOgVj3WzmmLYSzGGtnPRWTvAGBGUaYQMFDhhckCEDAsEEBA3YHAAAA" );
+		src: url( "data:font/woff2;base64,d09GMgABAAAAAAW8AAsAAAAADJAAAAVtAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHIFQBmAAhVwKiASGYQE2AiQDYAsyAAQgBYQWB4EaG/YKMwPCxgFA0R9L9n9J4MZQ7A0ze0ZgqLAYx9EqLWn7zsh5c7v1tyCdvi6ab7ge9ug4qwQZwUYkdDnxAtsED/z+eM/FEycjmR/y+yP7nMCQ5vTjnObQlrhpTgRJhjmj0tZvI7fDnrY1F9lvXOTz6yk8wF/u3TUXyC2K7jD/IE2K2wYZRlI0/3fu/dwH2TutanBAbQeOWRgGT+hSt6U2MLBAdk5PuNn/00LkOAA6ooZKWiJ0rOS/KhgDOJjc+/DHkq/sjk/zXQNA5K/rZYVuggOqKrDpbIpD2iDehsuu6yCAa7qlZFi7bhvhLae+koE0ZaaA31jcSopysOkYnfMVgk1oZErNtNwG+xSSTL2ZTH3104/DJxgcLg8tpUlaKBIjiaHvLZFIVEaqVykXzfq4G1sMfcUCfQkmG5w8luitD21MdMcAm+0Gif3jS5hGQDJqKCfYdFiTz1PUH5OB58zsesCTmcAACkwGGuKRn/ZEuWWTKW7aw2rHIRVTpFwlylWr1aDpj/+DHPnKVapVH5ehXpSaQqq3oapkpGQ0YyVZsCopLg+WJGKhWGLz9RaYsW5Mon/cgmiikL7DWWraK+g5kIiHA3ERfwJu6ANEASv6gRwdfUEu+oF8BKAAKShEL1AEFxTDAyVwQDkSUIkYVCEE1egDamGDevigAb1BkyHCZ+ww8FnYofFZAoXPlDjXMIKA3IARTOiF22AB6A9g+nzriz2IK4pyNiFUJu/gQNA86YSQUt1xRo7V5x/t9+WmrGNQu0xOThiL+JzPW8XmzKpXMj7praVraLHgVvO08Ng4dodKM7noV5m8iTGjoavSMQAtWNr1W17tdtog5OWo08pyDpkLgA0F7sbGqEf7GkL+7p8z12xMUsS5/pOlBMOZVmURktyLcNsvHWmsXNnct1s1M1etEVP9Uwi4EljI5wjBWCaR7EYgVrVhxlgrvXftDuEpeU44N7Ri5gLNDHe9h+YGKW4/w1z6b8iE8L7LvARauCfIpH8Pc24fkWrRwEzAtMjkssda3HLEWDQasFHm5VIi82EkLMezjfj3Ny734iiJcZxEqLwe95XJ3x85FUlCMEHx9VsRdVROVbdv7moeniilmFzs5zRpSzIcQlSIoC5uHnQ2rm6Of1J800L1AfMSx3fkC97hdOW4deleD3Zwmj2R49u9rWA//4m31zC2FjTSQTVkKjKljTXJNT4VRqhU67EfseWAB9ksAJmpTMS9dG7meiaj0PtLgAo2SStBIaYvjYM1oyu76zbWrrqNJX3hzknXHN2dwPd55F3JM3z4Gd1v2huECytvwIZ/bGy1SPdb5m5VRUHdq3/PGe8+5sv/1/2NlEjkBLMciXTlVtrIskqcFMajgJgyvTFOwGwQE9BGETnebG1ywy1z8F+lbpwCmej9TE41+P1Su9HYLx4Z8PlnOLbJf2XZrBtsEqU9ZRLIWunlQ/Jd2HFlel9fyqBCJnoQFx+IEglcdRq0mhF7PaaQ+DdgPBDC9olyRQQlWtEPBs8wmGwT4Zpk5s6eXvZTRN1BiFUDSKEMSuy8RCuuwtDXA5hiL+Ha4c08nrHRvGS54eK0TvJOfk2qyT5b801tCYU4dkP0Ikcq1JSQRX3D5ewnEYeuccZDzskoJcba+ERGulmk7vvepW3RGc6bYLg487flnfyaVEO9hmt+U1uwC84dx24oITmyUspSCdmN9A2Xs58EEoeJExpyxkO9FEpqGuM/y9J8IiPdXKOk7ns0mivLuv5FPrujn1Uf932BHhUkWVE13TAt23E9X4SgGE6QqtWE+xb8LHeWL+UukZPtWu/KmtJDU1oHua+qWAUNAniYQcACwwUKJCBwsEIFBXoDAA==" );
 	}
 
 	.Icon {
+		--icon: none;
 		display: inline-block;
-		font-family: "icon";
+		font-family: var( --iconfont );
 		font-style: normal;
 		font-weight: normal;
 		font-variant: normal;
@@ -69,6 +68,7 @@ $icons: (
 		// stylelint-enable
 
 		&::before {
+			content: var( --icon );
 			font-family: inherit;
 			font-style: inherit;
 			font-weight: inherit;
@@ -81,31 +81,31 @@ $icons: (
 
 
 	.Icon.-right::before {
-		content: unquote("\"\\e004\"");
+		--icon: #{ getIconContent( "right" ) };
 	}
 
 	.Icon.-down::before {
-		content: unquote("\"\\e003\"");
+		--icon: #{ getIconContent( "down" ) };
 	}
 
 	.Icon.-left::before {
-		content: unquote("\"\\e002\"");
+		--icon: #{ getIconContent( "left" ) };
 	}
 
 	.Icon.-up::before {
-		content: unquote("\"\\e001\"");
+		--icon: #{ getIconContent( "up" ) };
 	}
 
 	.Icon.-null::before {
-		content: unquote("\"\\e000\"");
+		--icon: #{ getIconContent( "null" ) };
 	}
 
 	.Icon.-rabbit::before {
-		content: unquote("\"\\e005\"");
+		--icon: #{ getIconContent( "rabbit" ) };
 	}
 
 	.Icon.-panda::before {
-		content: unquote("\"\\e006\"");
+		--icon: #{ getIconContent( "panda" ) };
 	}
 
 }

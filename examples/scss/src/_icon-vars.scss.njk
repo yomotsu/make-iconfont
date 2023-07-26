@@ -1,23 +1,13 @@
-$icons: (
-{% for codepoint in codepoints %}
-	"{{codepoint[ 0 ]}}": unquote("\"\\{{codepoint[ 1 ]}}\""),
-{% endfor %}
-);
+@use "sass:string";
 
-@function getIconContent( $key ) {
-	@each $pair in $icons {
-		@if nth( $pair, 1 ) == $key {
-			@return nth( $pair, 2 );
-		}
-	}
-
-	@return null;
+@function getIconContent( $name ) {
+	@return var( --icon-#{ $name } );
 }
 
 @mixin icon( $name ) {
-	content: getIconContent( $name );
+	content: var( --icon-#{ $name } );
 	display: inline-block;
-	font-family: "{{ fontFamilyName }}";
+	font-family: var( --iconfont );
 	font-style: normal;
 	font-weight: normal;
 	font-variant: normal;
@@ -30,6 +20,14 @@ $icons: (
 }
 
 @mixin initIcon() {
+	:root {
+		--iconfont: "{{ fontFamilyName }}";
+{% for codepoint in codepoints %}
+		--icon-{{codepoint[ 0 ]}}: #{ string.unquote("\"\\{{ codepoint[ 1 ] }}\"") };
+{% endfor %}
+	}
+
+
 	@font-face {
 		font-family: "{{ fontFamilyName }}";
 		font-style: normal;
@@ -38,8 +36,9 @@ $icons: (
 	}
 
 	.{{ className }} {
+		--icon: none;
 		display: inline-block;
-		font-family: "{{ fontFamilyName }}";
+		font-family: var( --iconfont );
 		font-style: normal;
 		font-weight: normal;
 		font-variant: normal;
@@ -57,6 +56,7 @@ $icons: (
 		// stylelint-enable
 
 		&::before {
+			content: var( --icon );
 			font-family: inherit;
 			font-style: inherit;
 			font-weight: inherit;
@@ -69,7 +69,7 @@ $icons: (
 
 {% for codepoint in codepoints %}
 	.{{ className }}.-{{ codepoint[ 0 ] }}::before {
-		content: unquote("\"\\{{ codepoint[ 1 ] }}\"");
+		--icon: #{ getIconContent( "{{ codepoint[ 0 ] }}" ) };
 	}
 {% endfor %}
 }

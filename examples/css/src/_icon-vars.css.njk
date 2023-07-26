@@ -13,8 +13,9 @@
 }
 
 .{{ className }} {
+	--icon: none;
 	display: inline-block;
-	font-family: "{{ fontFamilyName }}";
+	font-family: var( --iconfont );
 	font-style: normal;
 	font-weight: normal;
 	font-variant: normal;
@@ -33,6 +34,7 @@
 }
 
 .{{ className }}::before {
+	content: var( --icon );
 	font-family: inherit;
 	font-style: inherit;
 	font-weight: inherit;
@@ -43,7 +45,7 @@
 }
 
 {% for codepoint in codepoints %}
-.{{ className }}.-{{ codepoint[ 0 ] }}::before {
-	content: var(--icon-{{ codepoint[ 0 ] }});
+.{{ className }}.-{{ codepoint[ 0 ] }} {
+	--icon: var(--icon-{{ codepoint[ 0 ] }});
 }
 {% endfor %}

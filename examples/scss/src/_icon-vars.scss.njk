@@ -68,7 +68,7 @@
 	}
 
 {% for codepoint in codepoints %}
-	.{{ className }}.-{{ codepoint[ 0 ] }}::before {
+	.{{ className }}.-{{ codepoint[ 0 ] }} {
 		--icon: #{ getIconContent( "{{ codepoint[ 0 ] }}" ) };
 	}
 {% endfor %}
